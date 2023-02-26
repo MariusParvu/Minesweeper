@@ -10,17 +10,17 @@ Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_ ) : themeNames
 
 	gameLength = screenLength; //the length of the board will fit the screen's length
 
-    Reroll();
+   Reroll();
 
-    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
+   field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
-    loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
-    loadTextures();
+   loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
+   loadTextures();
 
-    Initialize();
+   Initialize();
 
-    drawGameArea();
-    redrawScene();
+   drawGameArea();
+   redrawScene();
  }
 
 Game::Game( std::string themeName_, int backgroundOffset_, int origin_x_, int origin_y_, int fieldLength_, int fieldHeight_, int mineCount_, int cellSize_, int borderCells_, Canvas& canvas_ ) :
@@ -38,9 +38,9 @@ Game::Game( std::string themeName_, int backgroundOffset_, int origin_x_, int or
 
 	gameLength = screenLength; //the length of the board will fit the screen's length
 
-    Reroll();
+   Reroll();
 
-    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
+   field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
 	loadTheme( themeName_ );
 	loadTextures();
@@ -55,17 +55,17 @@ Game::~Game()  {
  }
 
 void Game::Reroll()  {
-    x = 0; 
-    y = 0;
-    borderCells = 1;
-    newgame = true;
-    cursorEnabled = true; 
-    hintEnabled = true;
-    secondChances = 0;
-    cursor_x = 0; 
-    cursor_y = 0;
+   x = 0; 
+   y = 0;
+   borderCells = 1;
+	newgame = true;
+	cursorEnabled = true; 
+	hintEnabled = true;
+	secondChances = 0;
+	cursor_x = 0; 
+	cursor_y = 0;
 
-    firstClicked.reset();
+   firstClicked.reset();
 
 	gameHeight = gameLength / screenRatio;
 
@@ -73,11 +73,11 @@ void Game::Reroll()  {
 	auto cellRatio = screenSubdivision * roll;
 	std::vector<float> difficulty = { 18.29, 20.72, 22.36 };
 
-    backgroundOffset = cellRatio / screenSubdivision;
-    cellSize = gameLength / cellRatio;
+   backgroundOffset = cellRatio / screenSubdivision;
+   cellSize = gameLength / cellRatio;
 
-    fieldLength = gameLength / cellSize - 2 * borderCells - backgroundOffset * 2;
-    fieldHeight = gameHeight / cellSize - 2 * borderCells - backgroundOffset * 2;
+   fieldLength = gameLength / cellSize - 2 * borderCells - backgroundOffset * 2;
+   fieldHeight = gameHeight / cellSize - 2 * borderCells - backgroundOffset * 2;
 
 	mineCount = ( fieldLength * fieldHeight ) * ( difficulty.at( roll - 1 ) / 100 );
 
@@ -209,42 +209,42 @@ std::vector<Cell::Coords> Game::Redraw( std::shared_ptr<Cell> cell_ , unsigned t
     canvas.Paint( *tileMap, tileMap->getTileAt( tile_ == -1 ? cell_->drawTile() : tile_ ) , tileRect );
 
     if( tile_ == Cell::State::cell )  {
-		for( auto n : cell_->getNeighbors() )  {
-			if( n->Erased() )  {
-				n->Restore();
-				restored.emplace_back( n->getCoords() );
+	for( auto n : cell_->getNeighbors() )  {
+		if( n->Erased() )  {
+			n->Restore();
+			restored.emplace_back( n->getCoords() );
 
-				SDL_Rect rect = { n->getCoords().x * tileSize, n->getCoords().y * tileSize, tileSize, tileSize };
-				canvas.Paint( *tileMap, tileMap->getTileAt( n->drawTile() ) , rect );
-			 }
+			SDL_Rect rect = { n->getCoords().x * tileSize, n->getCoords().y * tileSize, tileSize, tileSize };
+			canvas.Paint( *tileMap, tileMap->getTileAt( n->drawTile() ) , rect );
 		 }
+	 }
      }
     return restored;
  }
 
 int Game::Redraw( const std::vector<Cell::Coords>& coords_ )  {
     if( coords_.size() )  { 
-	canvas.renderTarget( *gameArea );
-	    for( auto f : coords_ )  {
-			auto cell = field->getCellAt( f.x, f.y );
-			SDL_Rect tileRect = { f.x * tileSize, f.y * tileSize, tileSize, tileSize };
+		canvas.renderTarget( *gameArea );
+			for( auto f : coords_ )  {
+				auto cell = field->getCellAt( f.x, f.y );
+				SDL_Rect tileRect = { f.x * tileSize, f.y * tileSize, tileSize, tileSize };
 
-			canvas.Paint( *tileMap, tileMap->getTileAt( cell->drawTile() ) , tileRect );
+				canvas.Paint( *tileMap, tileMap->getTileAt( cell->drawTile() ) , tileRect );
 	     }
 	 }
     return 0;
  }
 
 void Game::Redraw( const Cell::Coords& coords_ )  {
-    canvas.renderTarget( *gameArea );
+   canvas.renderTarget( *gameArea );
 	auto cell = field->getCellAt( coords_.x, coords_.y );
 	SDL_Rect tileRect = { coords_.x * tileSize, coords_.y * tileSize, tileSize, tileSize };
 
 	bool colorChanged = false; 
 	if( cell == firstClicked || cell == firstClicked->getLeftCell() || cell == firstClicked->getRightCell() )  {
 	    if( cell->getMineCount() > 0 )  {
-			tileMap->setColor( 150, 150, 150 ); //graying out the mine counter cells
-			colorChanged = true;
+			 tileMap->setColor( 150, 150, 150 ); //graying out the mine counter cells
+			 colorChanged = true;
 	     }
 	 }
 
@@ -256,11 +256,11 @@ void Game::Redraw( const Cell::Coords& coords_ )  {
  }
 
 void Game::drawGameArea()  {
-    canvas.renderTarget( *gameArea );
-    bool colorChanged = false;
+	canvas.renderTarget( *gameArea );
+	bool colorChanged = false;
 
-    SDL_Rect tileRect;
-    for( int x = 0; x < fieldLength; x++ )  {
+	SDL_Rect tileRect;
+	for( int x = 0; x < fieldLength; x++ )  {
 		for( int y = 0; y < fieldHeight; y++ )  {
 			tileRect = { x * tileSize, y * tileSize, tileSize, tileSize };
 			auto cell = field->getCellAt( x, y );
@@ -280,13 +280,13 @@ void Game::drawGameArea()  {
 				tileMap->resetColor();
 			 }
 		 }
-     }
+    }
  }
 
 void Game::Paint()  {
-    canvas.Clear();
+	canvas.Clear();
 
-    if( animationQueue.queue.size() )  {
+	if( animationQueue.queue.size() )  {
 		auto coords = animationQueue.queue.back();
 
 		auto cell = field->getCellAt( coords.x, coords.y );
@@ -302,17 +302,17 @@ void Game::Paint()  {
 
 		Redraw( animationQueue.queue.back() );
 		animationQueue.queue.pop_back();
-     }
+    }
 
-    redrawScene(); //draw before this function and animate after it
+	redrawScene(); //draw before this function and animate after it
 
-//    theme->redrawPointer();
-    theme->redrawDetonation();
-    theme->redrawErasure();
-    redrawCursor();
-    canvas.Refresh();
+	//    theme->redrawPointer();
+	theme->redrawDetonation();
+	theme->redrawErasure();
+	redrawCursor();
+	canvas.Refresh();
 
-    if( !animationQueue.queue.size() && secondChances < 0 ) Reset();
+	if( !animationQueue.queue.size() && secondChances < 0 ) Reset();
  }
 
 void Game::redrawCursor()  {
@@ -339,7 +339,7 @@ void Game::redrawCursor()  {
 				 }
 			 }
 		 }
-     }
+    }
  }
 
 int Game::randomRange( int from_, int to_ )  {
@@ -365,9 +365,9 @@ void Game::redrawScene()  {
  }
 
 std::vector<Cell::Coords> Game::setFlagCount()  {  //updates the counter on the field and returns the coordinates of the cells that need to be redrawn
-    std::vector<Cell::Coords> vec;
+	std::vector<Cell::Coords> vec;
 
-    if( firstClicked != nullptr && field->getFlaggedMines() >= 0 && field->getFlaggedMines() <= mineCount )  {
+	if( firstClicked != nullptr && field->getFlaggedMines() >= 0 && field->getFlaggedMines() <= mineCount )  {
 		firstClicked->setState( Cell::numbered );
 		firstClicked->getLeftCell()->setState( Cell::numbered );
 		firstClicked->getRightCell()->setState( Cell::numbered );
@@ -574,10 +574,10 @@ void Game::Run()  {
 					 }
 					break;
 					}
-				 }
+				}
 
 				redrawScene();
-			break;
+				break;
 			}
 		}
 		auto frameTicks = startCounter.getTicks();
@@ -653,29 +653,29 @@ void Theme::redrawErasure()  {
  }
 
 void Theme::redrawAnimation( std::vector<Animation>& animations_, Animation& animation_ )  {
-    bool clear = true;
+	bool clear = true;
 
-    if( animations_.size() )  {
-	for( std::vector<Animation>::iterator f = std::begin( animations_ ); f != std::end( animations_ ); ++f )  {
-	    if( !f->Finished() )  {
-			f->Render();
+	if( animations_.size() )  {
+		for( std::vector<Animation>::iterator f = std::begin( animations_ ); f != std::end( animations_ ); ++f )  {
+			 if( !f->Finished() )  {
+				f->Render();
+				 }
+
+				clear &= f->Finished();
 			 }
-
-			clear &= f->Finished();
-		 }
-     }
+		  }
 	else 
 	    animation_.Render();
 
-    if( clear ) animations_.clear();
+	if( clear ) animations_.clear();
  }
 
 void Theme::redrawBackground( SDL_Rect dest_, Canvas& canvas_ )  {
-    if( backgroundTexture != nullptr && blackTexture != nullptr )  {
+	if( backgroundTexture != nullptr && blackTexture != nullptr )  {
 		canvas_.renderTargetSelf();
 		canvas_.Paint( *blackTexture );
 		canvas_.Paint( *backgroundTexture, dest_ );
-     }
+	 }
  }
 
 void Theme::detonationAnimation( int x_, int y_, Canvas& canvas_, bool reverse_ )  {
