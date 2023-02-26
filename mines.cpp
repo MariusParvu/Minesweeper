@@ -417,7 +417,7 @@ void mineField::Mine( int amount_, Cell::Coords coords_ )  {
 			n->Visit();
 			vec.emplace_back( n );
 		 }
-	}
+	 }
 
 	if( mapSize >= mineCount ) {
 		while( amount_ > 0 )  {
