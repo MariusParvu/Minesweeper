@@ -1,4 +1,4 @@
-### You will need the SDL2 and SDl2_image librabries to compile
+### You will need the SDL2 and SDl2_image libraries to compile
 ## Linux
 ```sudo apt-get install SDL2 SDL2_image```
 ## Mac ( first install Brew ) 
