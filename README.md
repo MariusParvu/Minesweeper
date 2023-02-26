@@ -16,3 +16,4 @@
 # The difficulty is fine tuned by myself to my personal taste but if you would like to help build a GUI with a prompt and all, then I'd love to assist.
 # The themes cycle through along with the difficulty and this was again a personal preference.
 # There is also no timer which is trivial to add but there should be made a way to display it first.
+# There are no bounds at the edges, instead the field extends itself in the opposite side of the screen. You could actually envision it as a spherical field, unwrapped in a rectangular area.
