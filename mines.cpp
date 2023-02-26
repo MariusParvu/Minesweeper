@@ -23,19 +23,19 @@ void Cell::setState( Cell::State state_ ) {
  }
 
 void Cell::countMines()  {
-    if( state != Cell::State::mined )  {
-	mineCount = ( getUpCell()->getState() == Cell::State::mined ) + 
-				( getDownCell()->getState() == Cell::State::mined ) + 
-				( getLeftCell()->getState() == Cell::State::mined ) + 
-				( getRightCell()->getState() == Cell::State::mined ) + 
-				( getUpCell()->getLeftCell()->getState() == Cell::State::mined ) + 
-				( getUpCell()->getRightCell()->getState() == Cell::State::mined ) + 
-				( getDownCell()->getLeftCell()->getState() == Cell::State::mined ) + 
-				( getDownCell()->getRightCell()->getState() == Cell::State::mined );
-	if( mineCount > 0 ) 
-		state = Cell::State::numbered;
-	else state = Cell::State::empty;
-     }
+	if( state != Cell::State::mined )  {
+		mineCount = ( getUpCell()->getState() == Cell::State::mined ) + 
+					( getDownCell()->getState() == Cell::State::mined ) + 
+					( getLeftCell()->getState() == Cell::State::mined ) + 
+					( getRightCell()->getState() == Cell::State::mined ) + 
+					( getUpCell()->getLeftCell()->getState() == Cell::State::mined ) + 
+					( getUpCell()->getRightCell()->getState() == Cell::State::mined ) + 
+					( getDownCell()->getLeftCell()->getState() == Cell::State::mined ) + 
+					( getDownCell()->getRightCell()->getState() == Cell::State::mined );
+		if( mineCount > 0 ) 
+			state = Cell::State::numbered;
+		else state = Cell::State::empty;
+    }
  }
 
 int Cell::getMineCount() const {
@@ -261,8 +261,7 @@ std::vector<Cell::Coords> Cell::hideErased()  {
 			Erase();
 			vec.emplace_back( coords);
 		 }
-     }
-
+    }
 	return vec;
  }
 
@@ -278,7 +277,7 @@ std::vector<Cell::Coords> Cell::detonateAll()  {
 				auto vec = f->detonateAll();
 				cells.insert( cells.end(), vec.begin(), vec.end() );
 			 }
-		}
+		 }
 	 }
     return cells;
  }
@@ -290,11 +289,11 @@ cellRow::cellRow() {
  }
 
 cellRow::cellRow( int count_ )  {
-    row.emplace_back( std::make_shared<Cell>( Cell() ) );
-    std::deque<std::shared_ptr<Cell>>::iterator it = row.begin();
+	row.emplace_back( std::make_shared<Cell>( Cell() ) );
+	std::deque<std::shared_ptr<Cell>>::iterator it = row.begin();
 
-    for( int n = 0; n < count_ - 1; n++ ) {
-        auto newCell = std::make_shared<Cell>( Cell() );
+	for( int n = 0; n < count_ - 1; n++ ) {
+		auto newCell = std::make_shared<Cell>( Cell() );
 
 		newCell->linkLeft( *it );
 
@@ -304,8 +303,8 @@ cellRow::cellRow( int count_ )  {
 		++it;
      }
 
-    (*it)->linkRight( row.front() );
-    row.front()->linkLeft( *it );
+	(*it)->linkRight( row.front() );
+	row.front()->linkLeft( *it );
  } 
 
 cellRow::~cellRow() {
@@ -328,12 +327,12 @@ cellGrid::cellGrid() {
 
 cellGrid::cellGrid( int length_, int height_ )  {//: grid( height_, cellRow( length_ ) ) //copies shared pointers too, the damn bastard
 
-    for( int n = 0; n < height_; n++ )  {
-	grid.emplace_back( cellRow( length_ ) );
-     }
-    int id = 0, row = 0, col = 0;
+	for( int n = 0; n < height_; n++ )  {
+		grid.emplace_back( cellRow( length_ ) );
+    }
+	int id = 0, row = 0, col = 0;
 
-    auto link = [&]( std::shared_ptr<Cell> up_, std::shared_ptr<Cell> down_ ) -> void  {
+	auto link = [&]( std::shared_ptr<Cell> up_, std::shared_ptr<Cell> down_ ) -> void  {
 		(*up_).linkDown( ( down_ ) );
 		(*down_).linkUp( ( up_ ) );
 
@@ -341,28 +340,28 @@ cellGrid::cellGrid( int length_, int height_ )  {//: grid( height_, cellRow( len
 
 		cellMap.emplace( id, up_ );
 		id++;
-     };
+    };
 
-    std::deque<cellRow>::iterator firstRow = std::begin( grid );
-    std::deque<cellRow>::iterator nextRow;
-    if( grid.size() >= 1 )  nextRow = firstRow + 1;
+	std::deque<cellRow>::iterator firstRow = std::begin( grid );
+	std::deque<cellRow>::iterator nextRow;
+	if( grid.size() >= 1 )  nextRow = firstRow + 1;
 
-    for( row = 0; nextRow != std::end( grid ); ++firstRow, ++nextRow, row++ )  {
+	for( row = 0; nextRow != std::end( grid ); ++firstRow, ++nextRow, row++ )  {
 	auto upperCell = std::begin( firstRow->getRow() );
 	auto lowerCell = std::begin( nextRow->getRow() );
 
 	for( col = 0; upperCell != std::end( firstRow->getRow() ); ++upperCell, ++lowerCell, col++ )  { 
-	    link( *upperCell, *lowerCell );
-		(*upperCell)->setCoords( col, row );
-	 }
-     }
+			link( *upperCell, *lowerCell );
+			(*upperCell)->setCoords( col, row );
+		}
+	}
 
-    auto upperCell = std::begin( grid.back().getRow() );
-    auto lowerCell = std::begin( grid.front().getRow() );
+	auto upperCell = std::begin( grid.back().getRow() );
+	auto lowerCell = std::begin( grid.front().getRow() );
 
-    for( col = 0; lowerCell != std::end( grid.front().getRow() ); ++upperCell, ++lowerCell, col++ )  { 
-	link( *upperCell, *lowerCell );
-	    (*upperCell)->setCoords( col, row );
+	for( col = 0; lowerCell != std::end( grid.front().getRow() ); ++upperCell, ++lowerCell, col++ )  { 
+		link( *upperCell, *lowerCell );
+			 (*upperCell)->setCoords( col, row );
      }
  }
 
@@ -390,10 +389,10 @@ mineField::mineField()  {
  }
 
 mineField::mineField( int length_, int height_, int mineCount_ ) : length( length_ ), height( height_ ), mineCount( mineCount_ ), grid( length_, height_ ), mapSize( grid.getMap().size() ), range( 0, mapSize - 1 ), flaggedMines( 0 )  {
-    for( auto f : grid.getMap()  )  {
-	    f.second->setNeighbors();
+	for( auto f : grid.getMap()  )  {
+		f.second->setNeighbors();
 		cellsCoords.emplace_back( f.second->getCoords() );
-     }
+    }
  }	
 
 mineField::~mineField()  {
@@ -401,56 +400,56 @@ mineField::~mineField()  {
  }
 
 void mineField::Mine( int amount_, Cell::Coords coords_ )  {
-    std::mt19937 generator( std::time( nullptr ) );
+	std::mt19937 generator( std::time( nullptr ) );
 
-    bool clear = true;
-    std::vector<std::shared_ptr<Cell>> vec;
+	bool clear = true;
+	std::vector<std::shared_ptr<Cell>> vec;
 
-    if( coords_.x != -1 && coords_.y != -1 )  {
-	for( auto n : getCellAt( coords_.x, coords_.y )->getNeighbors() )  {
-	    if( amount_ >= 9 )  {
-		for( auto p : n->getNeighbors() )  {
-		    if( !p->Visited() )  {
-			    vec.emplace_back( p );
-			    p->Visit();
-		     }
+	if( coords_.x != -1 && coords_.y != -1 )  {
+		for( auto n : getCellAt( coords_.x, coords_.y )->getNeighbors() )  {
+			if( amount_ >= 9 )  {
+				for( auto p : n->getNeighbors() )  {
+					if( !p->Visited() )  {
+						vec.emplace_back( p );
+						p->Visit();
+					}
+				}
+			}
+			n->Visit();
+			vec.emplace_back( n );
 		 }
-	     }
-	    n->Visit();
-	    vec.emplace_back( n );
-	 }
-     }
+	}
 
-    if( mapSize >= mineCount ) {
-        while( amount_ > 0 )  {
-	    auto pointer = grid.getMap().at( range( generator ) );
+	if( mapSize >= mineCount ) {
+		while( amount_ > 0 )  {
+			auto pointer = grid.getMap().at( range( generator ) );
 
-	    for( auto f : vec )  {
-		    clear &= f != pointer;
-	     }
+			for( auto f : vec )  {
+				clear &= f != pointer;
+			}
 
-	    if( clear )  {
-		    if( (bool) ( pointer->getState() != Cell::State::mined ) )  {
-			    pointer->setState( Cell::State::mined );
-			    amount_--;
-		     }   
-	     }
-	    clear = true;
-         }
-     } 
+			if( clear )  {
+				if( (bool) ( pointer->getState() != Cell::State::mined ) )  {
+					pointer->setState( Cell::State::mined );
+					amount_--;
+					}   
+			  }
+			clear = true;
+		}
+	} 
 
-    for( auto f : grid.getMap()  )  {
+	for( auto f : grid.getMap()  )  {
 		f.second->countMines();
-     }
+	}
  }
 
 
 const std::shared_ptr<Cell>& mineField::getCellAt( int x_, int y_ )  {
-    if( grid.gridSize() ) { 
-        if( y_ >= 0 && y_ < grid.gridSize() && x_ >= 0 && x_ < grid.getGrid().front().rowSize() ) {
+	if( grid.gridSize() ) { 
+		if( y_ >= 0 && y_ < grid.gridSize() && x_ >= 0 && x_ < grid.getGrid().front().rowSize() ) {
 			return grid.getGrid().at( y_ ).getRow().at( x_ );
 		 }
-     }
+	 }
  }
 
 int mineField::getSize() {
