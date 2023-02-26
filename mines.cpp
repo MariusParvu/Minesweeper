@@ -347,14 +347,14 @@ cellGrid::cellGrid( int length_, int height_ )  {//: grid( height_, cellRow( len
 	if( grid.size() >= 1 )  nextRow = firstRow + 1;
 
 	for( row = 0; nextRow != std::end( grid ); ++firstRow, ++nextRow, row++ )  {
-	auto upperCell = std::begin( firstRow->getRow() );
-	auto lowerCell = std::begin( nextRow->getRow() );
+		auto upperCell = std::begin( firstRow->getRow() );
+		auto lowerCell = std::begin( nextRow->getRow() );
 
-	for( col = 0; upperCell != std::end( firstRow->getRow() ); ++upperCell, ++lowerCell, col++ )  { 
+		for( col = 0; upperCell != std::end( firstRow->getRow() ); ++upperCell, ++lowerCell, col++ )  { 
 			link( *upperCell, *lowerCell );
 			(*upperCell)->setCoords( col, row );
-		}
-	}
+		 }
+	 }
 
 	auto upperCell = std::begin( grid.back().getRow() );
 	auto lowerCell = std::begin( grid.front().getRow() );
@@ -376,7 +376,6 @@ int cellGrid::gridSize() const {
 const std::deque<cellRow>& cellGrid::getGrid()  {
     return grid;
  }
-
 
 const std::map<int, std::shared_ptr<Cell>>& cellGrid::getMap() {
     return cellMap;
@@ -426,21 +425,21 @@ void mineField::Mine( int amount_, Cell::Coords coords_ )  {
 
 			for( auto f : vec )  {
 				clear &= f != pointer;
-			}
+			 }
 
 			if( clear )  {
 				if( (bool) ( pointer->getState() != Cell::State::mined ) )  {
 					pointer->setState( Cell::State::mined );
 					amount_--;
-					}   
-			  }
+				 }   
+			 }
 			clear = true;
-		}
-	} 
+		 }
+	 } 
 
 	for( auto f : grid.getMap()  )  {
 		f.second->countMines();
-	}
+	 }
  }
 
 
