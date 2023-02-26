@@ -3,6 +3,8 @@
 ```sudo apt-get install SDL2 SDL2_image```
 ## Mac ( first install Brew ) 
 ```sudo brew install SDL2 SDL2_image```
+## Windows
+I use the Nuwen MinGW distro on Windows which comes packed with the SDL 2 libs. Get it here https://nuwen.net/mingw.html
 
 ## You can make your own themes and animations ( see the sprites in the resources folder )
 
