@@ -11,3 +11,6 @@
 
 ![Untitled1](https://user-images.githubusercontent.com/70338038/221413155-f9cedb3e-f064-4009-885a-2eb9046c94fb.gif)
 
+
+[^1] There is no GUI and the mine count is displayed on the field after the first flag is set. 
+[^2] The difficulty is fine tuned by myself to my personal taste but if you would like to help build a GUI with a prompt and all, then I'd love to assist.
