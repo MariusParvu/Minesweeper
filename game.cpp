@@ -69,7 +69,7 @@ void Game::Reroll()  {
 
    gameHeight = gameLength / screenRatio;
 
-   auto roll = randomRange( 1, 2 );
+   auto roll = randomRange( 1, 3 ); //difficulty range ( affects field size )
    auto cellRatio = screenSubdivision * roll;
    std::vector<float> difficulty = { 18.29, 20.72, 22.36 };
 
