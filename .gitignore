@@ -2,3 +2,4 @@
 *.swp
 *.o
 mines
+.DS_Store
