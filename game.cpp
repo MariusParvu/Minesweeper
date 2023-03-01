@@ -59,7 +59,7 @@ void Game::Reroll()  {
 
    firstClicked.reset();
 
-   gameHeight = canvas.getScreenSize().length / canvas.getScreenRatio();
+   float gameHeight = canvas.getScreenSize().length / canvas.getScreenRatio();
 
    auto roll = randomRange( 1, 3 ); //difficulty range ( affects field size )
    auto cellRatio = screenSubdivision * roll;
@@ -81,8 +81,8 @@ void Game::Reroll()  {
     origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
     origin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2 + backgroundOffset * cellSize;
 
-    backgroundOrigin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2;
-    backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2;
+    backgroundOrigin_x = 0;
+    backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2; //needs work
  }
 
 void Game::Initialize()  {
