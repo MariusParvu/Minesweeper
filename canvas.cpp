@@ -7,7 +7,7 @@
 Canvas::Canvas( std::string title_, int xpos_, int ypos_, int height_, int width_, unsigned flags_ ) : pRenderer( nullptr ), pWindow( nullptr ), size{ 0, 0 }  {
     SDL_Init( SDL_INIT_EVERYTHING );
     pWindow = SDL_CreateWindow( title_.c_str(), xpos_, ypos_, height_, width_, flags_ );
-    pRenderer = SDL_CreateRenderer( pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE );
+    pRenderer = SDL_CreateRenderer( pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC );
     SDL_SetRenderDrawColor( pRenderer, 0x0, 0x0, 0x0, SDL_ALPHA_OPAQUE );
  }
 
@@ -21,7 +21,7 @@ Canvas::Canvas( std::string title_ ) : pRenderer( nullptr ), pWindow( nullptr ) 
     size.height = mode.h;
 
     pWindow = SDL_CreateWindow( title_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mode.w, mode.h,  0 );//SDL_WINDOW_FULLSCREEN );
-    pRenderer = SDL_CreateRenderer( pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE );
+    pRenderer = SDL_CreateRenderer( pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC );
     SDL_SetRenderDrawColor( pRenderer, 0x0, 0x0, 0x0, SDL_ALPHA_OPAQUE );
  }
 
