@@ -63,7 +63,7 @@ class Canvas  {
     SDL_Renderer* pRenderer;
 
     struct screenSize  {
-	float length, height;
+		 float length, height; // used float because of the screen ratio
      } size;
 public:
     Canvas() = delete;

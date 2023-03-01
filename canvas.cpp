@@ -3,7 +3,6 @@
 
 //----------Canvas---------- 
 
-//Windowed
 Canvas::Canvas( std::string title_, int xpos_, int ypos_, int height_, int width_, unsigned flags_ ) : pRenderer( nullptr ), pWindow( nullptr ), size{ 0, 0 }  {
     SDL_Init( SDL_INIT_EVERYTHING );
     pWindow = SDL_CreateWindow( title_.c_str(), xpos_, ypos_, height_, width_, flags_ );
@@ -11,12 +10,12 @@ Canvas::Canvas( std::string title_, int xpos_, int ypos_, int height_, int width
     SDL_SetRenderDrawColor( pRenderer, 0x0, 0x0, 0x0, SDL_ALPHA_OPAQUE );
  }
 
-//Fullscreen
 Canvas::Canvas( std::string title_ ) : pRenderer( nullptr ), pWindow( nullptr )  {
     SDL_Init( SDL_INIT_EVERYTHING );
 
     SDL_DisplayMode mode;
     SDL_GetCurrentDisplayMode( 0, &mode );
+
     size.length = mode.w;
     size.height = mode.h;
 
@@ -80,7 +79,7 @@ void Canvas::drawCursor( int x_, int y_, int cellSize_, SDL_Color color_ )  {
  }
 
 float Canvas::getScreenRatio() const  {
-    return size.length / size.height;
+    return ( float ) 16 / 9;//size.length / size.height;
  }
 
 const Canvas::screenSize& Canvas::getScreenSize()  {
@@ -107,7 +106,7 @@ Texture::Texture( std::string filename_, SDL_Renderer* renderer_ ) : filename( f
 
 			fillTextureMap();
 		 }
-     }
+    }
  }
 
 Texture::Texture() : texture( nullptr ), coords( { 0, 0, 0, 0 } ) {
@@ -286,7 +285,7 @@ void Timer::togglePause()  {
 			startTicks = SDL_GetTicks() - pausedTicks;
 			pausedTicks = 0;
 		 }
-     }
+    }
  }
 
 unsigned long Timer::operator-( const Timer& second_ ) {

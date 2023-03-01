@@ -5,11 +5,6 @@ Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_ ) : themeNames
    newgame( true ), cursorEnabled( true ), hintEnabled( true ),
    secondChances( 0 ), cursor_x( 0 ), cursor_y( 0 )  {
 
-    screenLength = canvas.getScreenSize().length;
-    screenHeight = canvas.getScreenSize().height;
-
-   gameLength = screenLength; //the length of the board will fit the screen's length
-
    Reroll();
 
    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
@@ -33,10 +28,7 @@ Game::Game( std::string themeName_, int backgroundOffset_, int origin_x_, int or
    field( std::make_shared<mineField> ( fieldLength, fieldHeight, mineCount ) ), 
    canvas( canvas_ )  {
 
-    screenLength = canvas.getScreenSize().length;
-    screenHeight = canvas.getScreenSize().height;
-
-   gameLength = screenLength; //the length of the board will fit the screen's length
+   //the length of the board will fit the screen's length
 
    Reroll();
 
@@ -67,16 +59,16 @@ void Game::Reroll()  {
 
    firstClicked.reset();
 
-   gameHeight = gameLength / screenRatio;
+   gameHeight = canvas.getScreenSize().length / canvas.getScreenRatio();
 
    auto roll = randomRange( 1, 3 ); //difficulty range ( affects field size )
    auto cellRatio = screenSubdivision * roll;
    std::vector<float> difficulty = { 18.29, 20.72, 22.36 };
 
    backgroundOffset = cellRatio / screenSubdivision;
-   cellSize = gameLength / cellRatio;
+   cellSize = canvas.getScreenSize().length / cellRatio;
 
-   fieldLength = gameLength / cellSize - 2 * borderCells - backgroundOffset * 2;
+   fieldLength = canvas.getScreenSize().length / cellSize - 2 * borderCells - backgroundOffset * 2;
    fieldHeight = gameHeight / cellSize - 2 * borderCells - backgroundOffset * 2;
 
    mineCount = ( fieldLength * fieldHeight ) * ( difficulty.at( roll - 1 ) / 100 );
@@ -86,11 +78,11 @@ void Game::Reroll()  {
       gameHeight -= cellSize;;
     }
 
-    origin_y = ( screenHeight - gameHeight ) / 2 + backgroundOffset * cellSize;
-    origin_x = ( screenLength - gameLength ) / 2 + backgroundOffset * cellSize;
+    origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
+    origin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2 + backgroundOffset * cellSize;
 
-    backgroundOrigin_x = ( screenLength - gameLength ) / 2;
-    backgroundOrigin_y = ( screenHeight - gameHeight ) / 2;
+    backgroundOrigin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2;
+    backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2;
  }
 
 void Game::Initialize()  {
