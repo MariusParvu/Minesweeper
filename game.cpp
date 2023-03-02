@@ -5,7 +5,7 @@ Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_ ) : themeNames
    newgame( true ), cursorEnabled( true ), hintEnabled( true ),
    secondChances( 0 ), cursor_x( 0 ), cursor_y( 0 )  {
 
-   Reroll();
+   Roll();
 
    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
@@ -30,7 +30,7 @@ Game::Game( std::string themeName_, int backgroundOffset_, int origin_x_, int or
 
    //the length of the board will fit the screen's length
 
-   Reroll();
+   Roll();
 
    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
@@ -46,7 +46,7 @@ Game::Game( std::string themeName_, int backgroundOffset_, int origin_x_, int or
 Game::~Game()  {
  }
 
-void Game::Reroll()  {
+void Game::Roll()  {
    x = 0; 
    y = 0;
    borderCells = 1;
@@ -61,9 +61,9 @@ void Game::Reroll()  {
 
    float gameHeight = canvas.getScreenSize().length / canvas.getScreenRatio();
 
-   auto roll = randomRange( 1, 1 ); //difficulty range ( affects field size )
+   auto roll = randomRange( 1, 3 ); //density range ( affects field size )
    auto cellRatio = screenSubdivision * roll;
-   std::vector<float> difficulty = { 18.29, 20.72, 22.36 };
+   std::vector<float> density = { 18.29, 20.72, 22.36 };// { 10, 70, 187 };
 
    backgroundOffset = cellRatio / screenSubdivision;
    cellSize = canvas.getScreenSize().length / cellRatio;
@@ -76,7 +76,7 @@ void Game::Reroll()  {
       gameHeight -= cellSize;;
     }
 
-   mineCount = ( fieldLength * fieldHeight ) * ( difficulty.at( roll - 1 ) / 100 );
+   mineCount = ( fieldLength * fieldHeight ) * ( density.at( roll - 1 ) / 100 );
 
 	origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
 	origin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2 + backgroundOffset * cellSize;
@@ -179,7 +179,7 @@ void Game::Reset()  {
     animationQueue.Clear();
     field.reset();
 
-    Reroll();
+    Roll();
 
     field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 

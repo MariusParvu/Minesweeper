@@ -80,7 +80,7 @@ class Game  {
     std::shared_ptr<Cell> firstClicked;
     std::vector<Cell::Coords> setFlagCount();
 
-    void Reroll();
+    void Roll();
     void Initialize();
 
  public:
