@@ -71,18 +71,18 @@ void Game::Reroll()  {
    fieldLength = canvas.getScreenSize().length / cellSize - 2 * borderCells - backgroundOffset * 2;
    fieldHeight = gameHeight / cellSize - 2 * borderCells - backgroundOffset * 2;
 
-   mineCount = ( fieldLength * fieldHeight ) * ( difficulty.at( roll - 1 ) / 100 );
-
    if( fieldHeight % 2 == 0 )  {  //we need an odd number of rows and an even number of columns ( 5 x 11; 11 x 25; 19 x 40 )
       fieldHeight--;
       gameHeight -= cellSize;;
     }
 
-    origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
-    origin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2 + backgroundOffset * cellSize;
+   mineCount = ( fieldLength * fieldHeight ) * ( difficulty.at( roll - 1 ) / 100 );
 
-    backgroundOrigin_x = 0;
-    backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2; //needs work
+	origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
+	origin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2 + backgroundOffset * cellSize;
+
+	backgroundOrigin_x = 0;
+	backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2; //won't show up right unless when in fullscreen
  }
 
 void Game::Initialize()  {

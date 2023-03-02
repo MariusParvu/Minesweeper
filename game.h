@@ -35,11 +35,10 @@ class Theme  {
  };
 
 class Game  {
-    int fieldLength, fieldHeight, gameLength, gameHeight, screenLength, screenHeight, mineCount, cellSize, borderCells, 
+    int fieldLength, fieldHeight, gameLength, screenLength, screenHeight, mineCount, cellSize, borderCells, 
     origin_x, origin_y, secondChances, tileSize, cursor_x, cursor_y, backgroundOffset, backgroundOrigin_x, backgroundOrigin_y,
     x, y; //first click coordinates
 
-//    static constexpr float screenRatio = ( float ) 16 / 9;
     static constexpr int screenSubdivision = 16; //common divisor of 1920 and 2560
 
     float screenRatio;

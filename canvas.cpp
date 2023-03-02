@@ -79,7 +79,8 @@ void Canvas::drawCursor( int x_, int y_, int cellSize_, SDL_Color color_ )  {
  }
 
 float Canvas::getScreenRatio() const  {
-    return ( float ) size.length / size.height;
+   return ( float ) size.length / size.height;
+//	return ( float ) 16 / 9;
  }
 
 const Canvas::screenSize& Canvas::getScreenSize()  {
