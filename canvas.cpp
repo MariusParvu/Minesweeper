@@ -1,4 +1,3 @@
-#include <sstream>
 #include "canvas.h"
 
 //----------Canvas---------- 
@@ -16,10 +15,10 @@ Canvas::Canvas( std::string title_ ) : pRenderer( nullptr ), pWindow( nullptr ) 
     SDL_DisplayMode mode;
     SDL_GetCurrentDisplayMode( 0, &mode );
 
-    size.length = mode.w;
+    size.length =  mode.w;
     size.height = mode.h;
 
-    pWindow = SDL_CreateWindow( title_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mode.w, mode.h,  0 );//SDL_WINDOW_FULLSCREEN );
+    pWindow = SDL_CreateWindow( title_.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mode.w, mode.h, SDL_WINDOW_FULLSCREEN_DESKTOP );
     pRenderer = SDL_CreateRenderer( pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC );
     SDL_SetRenderDrawColor( pRenderer, 0x0, 0x0, 0x0, SDL_ALPHA_OPAQUE );
  }
