@@ -61,7 +61,7 @@ void Game::Roll()  {
 
    float gameHeight = canvas.getScreenSize().length / canvas.getScreenRatio();
 
-   auto roll = randomRange( 1, 3 ); //density range ( affects field size )
+   auto roll = randomRange( 1, 1 );// themeNames.size() ); 
    auto cellRatio = screenSubdivision * roll;
    std::vector<float> density = { 18.29, 20.72, 22.36 };// { 10, 70, 187 };
 
