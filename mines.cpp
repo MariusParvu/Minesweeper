@@ -198,6 +198,7 @@ int Cell::drawTile()  {
       if( mineCount > 0 ) return mineCount;
     }
    else return State::cell;
+	return 0;
 }
 
 void Cell::setMineCount( int mineCount_ )  {
@@ -209,9 +210,9 @@ int Cell::getClearedCells()  {
  }
 
 std::vector<Cell::Coords> Cell::hideErased()  {
-    std::vector<Cell::Coords> vec;
+   std::vector<Cell::Coords> vec;
 
-    bool clear = flagged | cleared,
+   bool clear = flagged | cleared,
    clear1,
    clearSelf = flagged | cleared,
 
@@ -441,7 +442,6 @@ void mineField::Mine( int amount_, Cell::Coords coords_ )  {
       f.second->countMines();
     }
  }
-
 
 const std::shared_ptr<Cell>& mineField::getCellAt( int x_, int y_ )  {
    if( grid.gridSize() ) { 
