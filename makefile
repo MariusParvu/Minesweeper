@@ -7,10 +7,10 @@ all 	: $(OBJS)
 	arch -x86_64 clang++ -std=c++11 main.cpp $(OBJS) $(LIB) $(FLAGS) $(INCLUDE) -o mines
 
 game.o 	: game.cpp canvas.o mines.o
-	arch -x86_64 clang++ -std=c++11 -c $< -o $@ $(LIB) $(FLAGS) $(INCLUDE)
+	arch -x86_64 clang++ -std=c++11 -c $< -o $@ $(INCLUDE)
 
 %.o 	: %.cpp %.h
-	arch -x86_64 clang++ -std=c++11 -c $< -o $@ $(LIB) $(FLAGS) $(INCLUDE)
+	arch -x86_64 clang++ -std=c++11 -c $< -o $@ $(INCLUDE)
 
 clean	:
 	rm *.o
