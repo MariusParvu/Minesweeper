@@ -64,7 +64,7 @@ void Game::Roll()  {
    auto roll = randomRange( 2, 2 );// themeNames.size() ); 
    auto cellRatio = screenSubdivision * roll;
    //std::vector<float> density = { 18.29, 20.72, 22.36 };
-   std::vector<float> density = { 10, 79, 187 };
+   std::vector<float> density = { 10, 78, 187 };
 
    backgroundOffset = cellRatio / screenSubdivision;
    cellSize = canvas.getScreenSize().length / cellRatio;
