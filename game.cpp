@@ -59,31 +59,31 @@ void Game::Roll()  {
 
    firstClicked.reset();
 
-   float gameHeight = canvas.getScreenSize().length / canvas.getScreenRatio();
+   float gameHeight = canvas.getScreenSize().height;
+   int screenSubdivision = 16; //common divisor of 1920 and 2560
 
    auto roll = randomRange( 2, 2 );// themeNames.size() ); 
    auto cellRatio = screenSubdivision * roll;
    //std::vector<float> density = { 18.29, 20.72, 22.36 };
    std::vector<float> density = { 10, 78, 187 };
 
-   backgroundOffset = cellRatio / screenSubdivision;
+   backgroundOffset = roll;
    cellSize = canvas.getScreenSize().length / cellRatio;
 
    fieldLength = canvas.getScreenSize().length / cellSize - 2 * borderCells - backgroundOffset * 2;
    fieldHeight = gameHeight / cellSize - 2 * borderCells - backgroundOffset * 2;
 
-   if( fieldHeight % 2 == 0 )  {  //we need an odd number of rows and an even number of columns ( 5 x 11; 11 x 25; 19 x 40 )
+   if( fieldHeight % 2 == 0 )  {  //we need an odd number of rows and an even number of columns ( 5 x 12; 11 x 26; 19 x 40 )
       fieldHeight--;
       gameHeight -= cellSize;;
     }
 
-   //mineCount = ( fieldLength * fieldHeight ) * ( density.at( roll - 1 ) / 100 );
-   mineCount =  ( density.at( roll - 1 ) );
+    //mineCount = ( fieldLength * fieldHeight ) * ( density.at( roll - 1 ) / 100 );
+    mineCount =  ( density.at( roll - 1 ) );
 
 	origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
-	origin_x = ( canvas.getScreenSize().length - canvas.getScreenSize().length ) / 2 + backgroundOffset * cellSize;
+	origin_x = backgroundOffset * cellSize;
 
-	backgroundOrigin_x = 0;
 	backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2; //won't show up right unless when in fullscreen
  }
 
