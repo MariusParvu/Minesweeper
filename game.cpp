@@ -62,7 +62,7 @@ void Game::Roll()  {
    float gameHeight = canvas.getScreenSize().height;
    int screenSubdivision = 16; //common divisor of 1920 and 2560
 
-   auto roll = randomRange( 2, 2 ); //themeNames.size() ); 
+   auto roll = randomRange( 1, 2 ); 
    auto cellRatio = screenSubdivision * roll;
    std::vector<float> density = { 18.3, 23.2, 22.3 };
 
