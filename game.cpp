@@ -49,7 +49,7 @@ Game::~Game()  {
 void Game::Roll()  {
    x = 0; 
    y = 0;
-   borderCells = 1;
+   borderCells = 1; //grayed out border cells that mirror the opposite side of the field, max 2
    newgame = true;
    cursorEnabled = true; 
    hintEnabled = true;
@@ -62,10 +62,9 @@ void Game::Roll()  {
    float gameHeight = canvas.getScreenSize().height;
    int screenSubdivision = 16; //common divisor of 1920 and 2560
 
-   auto roll = randomRange( 2, 2 );// themeNames.size() ); 
+   auto roll = randomRange( 2, 2 ); //themeNames.size() ); 
    auto cellRatio = screenSubdivision * roll;
-   //std::vector<float> density = { 18.29, 20.72, 22.36 };
-   std::vector<float> density = { 10, 78, 187 };
+   std::vector<float> density = { 18.3, 23.2, 22.3 };
 
    backgroundOffset = roll;
    cellSize = canvas.getScreenSize().length / cellRatio;
@@ -78,8 +77,7 @@ void Game::Roll()  {
       gameHeight -= cellSize;;
     }
 
-    //mineCount = ( fieldLength * fieldHeight ) * ( density.at( roll - 1 ) / 100 );
-    mineCount =  ( density.at( roll - 1 ) );
+    mineCount = ( fieldLength * fieldHeight ) * ( density.at( roll - 1 ) / 100 );
 
 	origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
 	origin_x = backgroundOffset * cellSize;
