@@ -1,5 +1,5 @@
 ### You will need the SDL2 and SDl2_image libraries to compile
-## Linux
+## Linux ( Debian distros )
 ```sudo apt-get install SDL2 SDL2_image```
 ## Mac ( first install Brew ) 
 ```sudo brew install SDL2 SDL2_image```
