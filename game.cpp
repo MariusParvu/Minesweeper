@@ -60,7 +60,7 @@ void Game::Roll()  {
    firstClicked.reset();
 
    float gameHeight = canvas.getScreenSize().height;
-   int screenSubdivision = 16; //common divisor of 1920 and 2560
+   int screenSubdivision = 16; //common divisor of 1920 and 2560//
 
    auto roll = randomRange( 1, 2 ); 
    auto cellRatio = screenSubdivision * roll;
