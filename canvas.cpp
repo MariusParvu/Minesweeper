@@ -71,10 +71,10 @@ void Canvas::Refresh()  {
 
 void Canvas::drawCursor( int x_, int y_, int cellSize_, SDL_Color color_ )  {
 //	SDL_SetRenderDrawBlendMode( pRenderer, SDL_BLENDMODE_BLEND );
-	SDL_SetRenderDrawColor( pRenderer, color_.r, color_.g, color_.b, color_.a );
-	SDL_Rect rect = { x_, y_, cellSize_, cellSize_ };
+   SDL_SetRenderDrawColor( pRenderer, color_.r, color_.g, color_.b, color_.a );
+   SDL_Rect rect = { x_, y_, cellSize_, cellSize_ };
 //	SDL_RenderFillRect( pRenderer, &rect );
-	SDL_RenderDrawRect( pRenderer, &rect );
+   SDL_RenderDrawRect( pRenderer, &rect );
  }
 
 float Canvas::getScreenRatio() const  {
@@ -89,23 +89,23 @@ const Canvas::screenSize& Canvas::getScreenSize()  {
 //----------Texture---------- 
 
 Texture::Texture( int width_, int height_, SDL_Renderer* renderer_ ) : texture( nullptr ), length( 0 ), width( 0 )  {
-    texture = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width_, height_ );
-	SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );
+   texture = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width_, height_ );
+   SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );
  }
 
 Texture::Texture( std::string filename_, SDL_Renderer* renderer_ ) : filename( filename_ ), texture( nullptr ) {
     if( filename_.size() )  {
-		auto _surface = IMG_Load( filename_.c_str() );
-		if( _surface != nullptr )  {
-			length = _surface->w;
-			width = _surface->h;
+	auto _surface = IMG_Load( filename_.c_str() );
+	if( _surface != nullptr )  {
+	   length = _surface->w;
+	   width = _surface->h;
 
-			texture = SDL_CreateTextureFromSurface( renderer_, _surface );
-			SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );
-			SDL_FreeSurface( _surface );
+	   texture = SDL_CreateTextureFromSurface( renderer_, _surface );
+	   SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND );
+	   SDL_FreeSurface( _surface );
 
-			fillTextureMap();
-		 }
+	   fillTextureMap();
+	 }
     }
  }
 
@@ -114,7 +114,7 @@ Texture::Texture() : texture( nullptr ), coords( { 0, 0, 0, 0 } ) {
 
 Texture::~Texture()  {
     if( texture != nullptr )  {
-		SDL_DestroyTexture( texture );
+	SDL_DestroyTexture( texture );
      }
  }
 
@@ -124,7 +124,7 @@ const std::vector<SDL_Rect>& Texture::getTiles()  {
 
 void Texture::fillTextureMap( )  {
     for( int x = 0; x < length; x += width )  {
-		textureMap.emplace_back( (SDL_Rect) { x, 0, width, width} );
+	textureMap.emplace_back( (SDL_Rect) { x, 0, width, width} );
      }
  }
 
@@ -162,7 +162,7 @@ void Texture::resetColor()  {
 
 const SDL_Rect& Texture::getCoords() {
     if( texture != nullptr )  {
-		SDL_QueryTexture( texture, nullptr , nullptr , &coords.w, &coords.h );
+	SDL_QueryTexture( texture, nullptr , nullptr , &coords.w, &coords.h );
      }
     return coords;
  }
@@ -178,10 +178,10 @@ Animation::Animation( std::string filename_, SDL_Renderer* renderer_ ,unsigned t
     renderer = renderer_;
     texture = std::make_shared<Texture>( filename_, renderer );
     if( texture->getTexture() != nullptr )  {
-		textureLength = textureLength_ == -1 ? texture->imageLength() / texture->getTextureMapSize() : textureLength_;
-		textureHeight = textureHeight_ == -1 ? texture->imageWidth() : textureHeight_;
+	textureLength = textureLength_ == -1 ? texture->imageLength() / texture->getTextureMapSize() : textureLength_;
+	textureHeight = textureHeight_ == -1 ? texture->imageWidth() : textureHeight_;
 
-		frames = texture->getTextureMapSize();
+	frames = texture->getTextureMapSize();
      }
  }
 
@@ -189,21 +189,21 @@ Animation::Animation( std::shared_ptr<Texture> texture_, SDL_Renderer* renderer_
     renderer = renderer_;
     texture = texture_;
     if( texture->getTexture() != nullptr )  {
-	    textureLength = textureLength_ == -1 ? texture->imageLength() / texture->getTextureMapSize() : textureLength_;
-	    textureHeight = textureHeight_ == -1 ? texture->imageWidth() : textureHeight_;
+	textureLength = textureLength_ == -1 ? texture->imageLength() / texture->getTextureMapSize() : textureLength_;
+	textureHeight = textureHeight_ == -1 ? texture->imageWidth() : textureHeight_;
 
-	    frames = texture->getTextureMapSize();
+	frames = texture->getTextureMapSize();
      }
  }
 
 void Animation::Render()  {
     if( frameCounter < frames && texture->getTexture() != nullptr )  {
-		SDL_Rect src = texture->getTileAt( frameCounter ),
-		dest = { x - textureLength / 2, y - textureHeight / 2, textureLength, textureHeight };
+	SDL_Rect src = texture->getTileAt( frameCounter ),
+	dest = { x - textureLength / 2, y - textureHeight / 2, textureLength, textureHeight };
 
-		frameCounter++;
+	frameCounter++;
 
-		SDL_RenderCopy( renderer, texture->getTexture(), &src, &dest ); 
+	SDL_RenderCopy( renderer, texture->getTexture(), &src, &dest ); 
      }
  }
 
@@ -250,12 +250,11 @@ bool Timer::isPaused()  {
 
 unsigned long Timer::getTicks() const  {
     if( started )  {
-		if( paused )  {
-			return pausedTicks;
-		 }
-		else return SDL_GetTicks() - startTicks;
+	if( paused )  {
+	   return pausedTicks;
+	 }
+	else return SDL_GetTicks() - startTicks;
      }
-
     return 0;
  }
 
@@ -275,16 +274,16 @@ void Timer::Reset()  {
 
 void Timer::togglePause()  {
     if( started )  {
-		paused ^= true;
+	paused ^= true;
 
-		if( paused )  {
-			pausedTicks = SDL_GetTicks() - startTicks;
-			startTicks = 0;
-		 }
-		else  {
-			startTicks = SDL_GetTicks() - pausedTicks;
-			pausedTicks = 0;
-		 }
+	if( paused )  {
+	   pausedTicks = SDL_GetTicks() - startTicks;
+	   startTicks = 0;
+	 }
+	else  {
+	   startTicks = SDL_GetTicks() - pausedTicks;
+	   pausedTicks = 0;
+	 }
     }
  }
 
