@@ -4,8 +4,7 @@
 ## Mac ( first install Brew ) 
 ```sudo brew install SDL2 SDL2_image```
 ## Windows
-I use the Nuwen MinGW distro on Windows which comes packed with the SDL 2 libs. Get it here https://nuwen.net/mingw.html
-Make is included somewhere in the bin folder of the Nuwen distro which will anyway be added to the PATH so to compile just run make.exe in the the project folder.
+I use the Nuwen MinGW distro on Windows which comes packed with the SDL 2 libs. Get it here https://nuwen.net/mingw.html. Make is included somewhere in the bin folder of the Nuwen distro which will anyway be added to the PATH so to compile just run make.exe in the the project folder.
 
 ## You can make your own themes and animations ( see the sprites in the resources folder )
 
