@@ -14,7 +14,7 @@ I use the Nuwen C++ MinGW distro on Windows which comes packed with the SDL 2 li
 ![Untitled1](https://user-images.githubusercontent.com/70338038/221413155-f9cedb3e-f064-4009-885a-2eb9046c94fb.gif)
 
 
-### There is no GUI and the mine count is displayed on the field after the first flag is set. 
+### There is no GUI and the mine count is displayed on the field after the first flag is set. Use args for difficulties 1-4, ex ./mines 3. Defaults to 1
 ### The difficulty is fine tuned by myself to my personal taste but if you would like to help build a GUI with a prompt and all, then I'd love to assist.
 ### The themes cycle through at difficulty 1 and 2 and settle for Digital clock at diff 3 and 4 being the most readable one.
 ### There is also no timer which is trivial to add but there should be made a way to display it first.
