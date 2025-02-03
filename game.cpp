@@ -1,7 +1,7 @@
 #include "game.h"
 
-Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_ ) : themeNames( themeNames_ ), canvas( canvas_ ),  
-   x( 0 ), y( 0 ), borderCells( 1 ),
+Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_, int diff_ ) : themeNames( themeNames_ ), canvas( canvas_ ),  
+   x( 0 ), y( 0 ), borderCells( 1 ), difficulty( diff_ ),
    newgame( true ), cursorEnabled( true ), hintEnabled( true ),
    secondChances( 0 ), cursor_x( 0 ), cursor_y( 0 )  {
 
@@ -9,7 +9,12 @@ Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_ ) : themeNames
 
    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
-   loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
+   if( difficulty < 3 )  {
+      loadTheme( themeNames.at( randomRange( 1, themeNames.size() - 1 ) ) );
+    }
+   else 
+      loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
+                                      
    loadTextures();
 
    Initialize();
@@ -18,11 +23,11 @@ Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_ ) : themeNames
    redrawScene();
  }
 
-Game::Game( std::string themeName_, int backgroundOffset_, int origin_x_, int origin_y_, int fieldLength_, int fieldHeight_, int mineCount_, int cellSize_, int borderCells_, Canvas& canvas_ ) :
+Game::Game( int diff_, std::string themeName_, int backgroundOffset_, int origin_x_, int origin_y_, int fieldLength_, int fieldHeight_, int mineCount_, int cellSize_, int borderCells_, Canvas& canvas_ ) :
    fieldLength( fieldLength_ ), fieldHeight( fieldHeight_ ), borderCells( borderCells_ ), x( 0 ), y( 0 ),
    origin_x( origin_x_ + backgroundOffset_ * cellSize_ ), origin_y( origin_y_ + backgroundOffset_ * cellSize_ ), backgroundOffset( backgroundOffset_ ),
    backgroundOrigin_x( origin_x_ ), backgroundOrigin_y( origin_y_ ),
-   mineCount( mineCount_ ), cellSize( cellSize_ ), 
+   mineCount( mineCount_ ), cellSize( cellSize_ ), difficulty( diff_ ),
    newgame( true ), cursorEnabled( true ), hintEnabled( true ),
    secondChances( 0 ), cursor_x( 0 ), cursor_y( 0 ),
    field( std::make_shared<mineField> ( fieldLength, fieldHeight, mineCount ) ), 
@@ -62,11 +67,10 @@ void Game::Roll()  {
    float gameHeight = canvas.getScreenSize().height;
    int screenSubdivision = 16; //common divisor of 1920 and 2560//
 
-   auto roll = randomRange( 1, 2 ); 
-   auto cellRatio = screenSubdivision * roll;
-   std::vector<float> density = { 18.3, 23.2, 22.3 };
+   auto cellRatio = screenSubdivision * difficulty;
+   std::vector<float> density = { 18.3, 23.2, 22.3, 24 };
 
-   backgroundOffset = roll;
+   backgroundOffset = difficulty;
    cellSize = canvas.getScreenSize().length / cellRatio;
 
    fieldLength = canvas.getScreenSize().length / cellSize - 2 * borderCells - backgroundOffset * 2;
@@ -77,7 +81,7 @@ void Game::Roll()  {
       gameHeight -= cellSize;;
     }
 
-    mineCount = ( fieldLength * fieldHeight ) * ( density.at( roll - 1 ) / 100 );
+    mineCount = ( fieldLength * fieldHeight ) * ( density.at( difficulty - 1 ) / 100 );
 
 	origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
 	origin_x = backgroundOffset * cellSize;
@@ -183,7 +187,12 @@ void Game::Reset()  {
 
     field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
-    loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
+    if( difficulty < 3 )  {
+        loadTheme( themeNames.at( randomRange( 1, themeNames.size() - 1 ) ) );
+     }
+    else 
+       loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
+
     loadTextures();
 
     Initialize();
