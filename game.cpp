@@ -10,7 +10,7 @@ Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_, int diff_ ) :
    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
    if( difficulty < 3 )  {
-      loadTheme( themeNames.at( randomRange( 1, themeNames.size() - 1 ) ) );
+      loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
     }
    else 
       loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
@@ -188,7 +188,7 @@ void Game::Reset()  {
     field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
     if( difficulty < 3 )  {
-        loadTheme( themeNames.at( randomRange( 1, themeNames.size() - 1 ) ) );
+        loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
      }
     else 
        loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
