@@ -1,4 +1,5 @@
 #include "game.h"
+#include <functional>
 
 Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_, int diff_ ) : themeNames( themeNames_ ), canvas( canvas_ ),  
    x( 0 ), y( 0 ), borderCells( 1 ), difficulty( diff_ ),
@@ -68,7 +69,21 @@ void Game::Roll()  {
    int screenSubdivision = 16; //common divisor of 1920 and 2560//
 
    auto cellRatio = screenSubdivision * difficulty;
-   std::vector<float> density = { 18.3, 23.2, 22.3, 24 };
+   float second_difficulty = 4.2; //Increase to raise difficulty but in small increments
+                       
+   //The density starts with 6 mines per square and the second gets tweaked at around 4.2
+   //The third and fourth are calculated by the callback
+   std::vector<float> density_at_difficulty; 
+   std::function<int(float,float)> recurse_difficulty = [&]( float first_, float second_ ) -> int { //the type must be specified as it cannot be deduced
+      if( density_at_difficulty.size() == 4 ) 
+          return 0; 
+
+      density_at_difficulty.emplace_back( first_ );
+
+      return recurse_difficulty( second_, second_ - std::sqrt( ( first_ - second_ ) * 10 ) / 10 );
+
+    };
+   recurse_difficulty( 6, second_difficulty );
 
    backgroundOffset = difficulty;
    cellSize = canvas.getScreenSize().length / cellRatio;
@@ -81,7 +96,9 @@ void Game::Roll()  {
       gameHeight -= cellSize;;
     }
 
-    mineCount = ( fieldLength * fieldHeight ) * ( density.at( difficulty - 1 ) / 100 );
+    if( density_at_difficulty.size() > 0 )  {
+        mineCount = ( fieldLength * fieldHeight ) / ( density_at_difficulty.at( difficulty - 1 ) );
+     }
 
 	origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
 	origin_x = backgroundOffset * cellSize;
