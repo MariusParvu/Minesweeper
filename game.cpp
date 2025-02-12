@@ -10,11 +10,10 @@ Game::Game( std::vector<std::string> themeNames_, Canvas& canvas_, int diff_ ) :
 
    field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
-   if( difficulty < 3 )  {
-      loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
-    }
+   if( difficulty < 3 )
+     loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
    else 
-      loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
+     loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
                                       
    loadTextures();
 
@@ -69,22 +68,6 @@ void Game::Roll()  {
    int screenSubdivision = 16; //common divisor of 1920 and 2560//
 
    auto cellRatio = screenSubdivision * difficulty;
-   float second_difficulty = 4.2; //Increase to raise difficulty but in small increments
-                       
-   //The density starts with 6 mines per square and the second gets tweaked at around 4.2
-   //The third and fourth are calculated by the callback
-   std::vector<float> density_at_difficulty; 
-   std::function<int(float,float)> recurse_difficulty = [&]( float first_, float second_ ) -> int { //the type must be specified as it cannot be deduced
-      if( density_at_difficulty.size() == 4 ) 
-          return 0; 
-
-      density_at_difficulty.emplace_back( first_ );
-
-      return recurse_difficulty( second_, second_ - std::sqrt( ( first_ - second_ ) * 10 ) / 10 );
-
-    };
-   recurse_difficulty( 6, second_difficulty );
-
    backgroundOffset = difficulty;
    cellSize = canvas.getScreenSize().length / cellRatio;
 
@@ -96,14 +79,13 @@ void Game::Roll()  {
       gameHeight -= cellSize;;
     }
 
-    if( density_at_difficulty.size() > 0 )  {
-        mineCount = ( fieldLength * fieldHeight ) / ( density_at_difficulty.at( difficulty - 1 ) );
-     }
+   auto x = ( difficulty == 1 ? 6 : 6.2 ) * std::pow( 2, difficulty == 1 ? 0 : difficulty ); // adjust the 6 for /difficulty
+   mineCount = x * std::log( x );
 
-	origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
-	origin_x = backgroundOffset * cellSize;
+   origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
+   origin_x = backgroundOffset * cellSize;
 
-	backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2; //won't show up right unless when in fullscreen
+   backgroundOrigin_y = ( canvas.getScreenSize().height - gameHeight ) / 2; //won't show up right unless when in fullscreen
  }
 
 void Game::Initialize()  {
@@ -204,11 +186,10 @@ void Game::Reset()  {
 
     field = std::make_shared<mineField>( fieldLength, fieldHeight, mineCount );
 
-    if( difficulty < 3 )  {
-        loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
-     }
+    if( difficulty < 3 )
+       loadTheme( themeNames.at( randomRange( 0, themeNames.size() - 1 ) ) );
     else 
-       loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
+      loadTheme( "Digital clock" );  //Only Digital clock is suitable for larger fields
 
     loadTextures();
 
@@ -361,25 +342,25 @@ void Game::redrawCursor()  {
  }
 
 int Game::randomRange( int from_, int to_ )  {
-    std::uniform_int_distribution<> range( from_, to_ );
-    static std::mt19937 generator( std::time( nullptr ) );
-    return range( generator );
+   std::uniform_int_distribution<> range( from_, to_ );
+   static std::mt19937 generator( std::time( nullptr ) );
+   return range( generator );
  }
 
 void Game::redrawScene()  {
-    canvas.renderTarget( *borderTiles );
+   canvas.renderTarget( *borderTiles );
 
-    gameArea->setBlendMode( SDL_BLENDMODE_NONE );
-    for( auto src = std::begin( borderRectMapSrc ), dest = std::begin( borderRectMapDest ); src != std::end( borderRectMapSrc ); ++src, ++dest )  {
-      canvas.Paint( *gameArea, *src, *dest );
-     }
-    gameArea->setBlendMode( SDL_BLENDMODE_BLEND ); 
+   gameArea->setBlendMode( SDL_BLENDMODE_NONE );
+   for( auto src = std::begin( borderRectMapSrc ), dest = std::begin( borderRectMapDest ); src != std::end( borderRectMapSrc ); ++src, ++dest )  {
+     canvas.Paint( *gameArea, *src, *dest );
+    }
+   gameArea->setBlendMode( SDL_BLENDMODE_BLEND ); 
 
-    canvas.renderTargetSelf();
+   canvas.renderTargetSelf();
 
-    theme->redrawBackground( { backgroundOrigin_x, backgroundOrigin_y, fieldLength * cellSize + ( borderCells * 2 ) * cellSize + 2 * backgroundOffset * cellSize , fieldHeight * cellSize + ( borderCells * 2 ) * cellSize + 2 * backgroundOffset * cellSize }, canvas );
-    canvas.Paint( *borderTiles, borderRect );
-    canvas.Paint( *gameArea, gameAreaRect ); 
+   theme->redrawBackground( { backgroundOrigin_x, backgroundOrigin_y, fieldLength * cellSize + ( borderCells * 2 ) * cellSize + 2 * backgroundOffset * cellSize , fieldHeight * cellSize + ( borderCells * 2 ) * cellSize + 2 * backgroundOffset * cellSize }, canvas );
+   canvas.Paint( *borderTiles, borderRect );
+   canvas.Paint( *gameArea, gameAreaRect ); 
  }
 
 std::vector<Cell::Coords> Game::setFlagCount()  {  //updates the counter on the field and returns the coordinates of the cells that need to be redrawn
@@ -428,171 +409,171 @@ std::vector<Cell::Coords> Game::setFlagCount()  {  //updates the counter on the 
  }
 
 void Game::AnimationQueue::Add( const std::vector<Cell::Coords>& cells_ ) {  
-    queue.insert( queue.end(), cells_.begin(), cells_.end() );
-    std::reverse( std::begin( queue ), std::end( queue ) );
+   queue.insert( queue.end(), cells_.begin(), cells_.end() );
+   std::reverse( std::begin( queue ), std::end( queue ) );
  }
 
 void Game::AnimationQueue::Clear() {  
-    queue.clear();
+   queue.clear();
  }
 
 bool Game::inTextureBounds( int& x_, int& y_ )  {
 ///* Comment out for not being able to click the greyed cells
-    if( x_ < 0 ) x_ += fieldLength;
+   if( x_ < 0 ) x_ += fieldLength;
    else if( x_ >= fieldLength ) x_ -= fieldLength;
 
-    if( y_ < 0 ) y_ += fieldHeight;
+   if( y_ < 0 ) y_ += fieldHeight;
    else if( y_ >= fieldHeight ) y_ -= fieldHeight;
 //*/
-    if( x_ >= 0 && x_ < fieldLength && y_ >= 0 && y_ < fieldHeight )
-       return true;
+   if( x_ >= 0 && x_ < fieldLength && y_ >= 0 && y_ < fieldHeight )
+      return true;
    return false;
  }
 
 bool Game::inScreenBounds( int x_, int y_ )  {
-    return  ( x_ >= origin_x && y_ >= origin_y &&
-       x_ <= origin_x + ( fieldLength + borderCells * 2 ) * cellSize && 
-       y_ <= origin_y + ( fieldHeight + borderCells * 2 ) * cellSize );
+   return  ( x_ >= origin_x && y_ >= origin_y &&
+      x_ <= origin_x + ( fieldLength + borderCells * 2 ) * cellSize && 
+      y_ <= origin_y + ( fieldHeight + borderCells * 2 ) * cellSize );
  }
 
 void Game::Run()  {
-    std::shared_ptr<Cell> cell;
+   std::shared_ptr<Cell> cell;
 
-    SDL_Event breakEvent;
-    breakEvent.type = SDL_WINDOWEVENT;
+   SDL_Event breakEvent;
+   breakEvent.type = SDL_WINDOWEVENT;
 
-   //moving the window from screen to screen introduces a flicker
-    SDL_DisplayMode mode;
-    SDL_GetDisplayMode( 0, 0 /*3*/, &mode );
-    float fpsCap = 1000 / ( mode.refresh_rate );  //fps
+  //moving the window from screen to screen introduces a flicker
+   SDL_DisplayMode mode;
+   SDL_GetDisplayMode( 0, 0 /*3*/, &mode );
+   float fpsCap = 1000 / ( mode.refresh_rate );  //fps
 
-    while( true )  {
-      Timer startCounter;
-      startCounter.Start();
-      Paint();
+   while( true )  {
+     Timer startCounter;
+     startCounter.Start();
+     Paint();
 
-      SDL_PollEvent( &event );
+     SDL_PollEvent( &event );
 
-      if( event.type == SDL_QUIT ) break;
+     if( event.type == SDL_QUIT ) break;
 
-      switch( event.type )  {
-         //On windows the renderer cannot be recovered so the textures have to be reloaded
-   #ifdef _WIN32
-         case SDL_WINDOWEVENT:  {
-            if( event.window.event == SDL_WINDOWEVENT_RESTORED )  {
-               loadTextures(); 
-               drawGameArea();
-               redrawScene();
-             }
-            break;
-          }
-   #endif
-         case SDL_MOUSEMOTION:  {
-            if( inScreenBounds( event.motion.x, event.motion.y ) )  {
-               cursor_x = ( ( event.motion.x - origin_x ) / cellSize ) * cellSize;
-               cursor_y = ( ( event.motion.y - origin_y ) / cellSize ) * cellSize;
-             }
-            break;
-          }
-            
-         case SDL_MOUSEBUTTONUP:  {
-            SDL_PushEvent( &breakEvent );
-               switch( event.button.button )  {
-                  case SDL_BUTTON_LEFT :  {
-                     if( inScreenBounds( event.button.x, event.button.y ) )  {
-                        x = ( event.button.x - origin_x ) / cellSize - borderCells; 
-                        y = ( event.button.y - origin_y ) / cellSize - borderCells;
-
-                        if( inTextureBounds( x, y ) ) {
-                           if( newgame )  {
-                              field->Mine( mineCount, { x, y } );
-                              newgame = false;
-
-                              auto cell = field->getCellAt( x, y);
-                              firstClicked = cell;
-                              animationQueue.Add( cell->detonate() );
-                            }
-
-                           cell = field->getCellAt( x, y );
-                           if( !cell->Cleared() && !cell->Flagged() )  {
-                              if ( cell->getState() == Cell::State::mined )  { 
-                                 cell->Clear();
-                                 field->Flag();
-
-                                 animationQueue.Add( setFlagCount() );
-
-                                 animationQueue.Add( { cell->getCoords() } );
-
-                                 if( secondChances > 0 && !field->allCleared() )  {
-                                    secondChances--;
-                                    break;
-                                  }
-
-                                 else  {
-                                    secondChances--;
-                                    animationQueue.Add( cell->detonateAll() );
-                                    //Reset();
-                                  }
-                               }
-                              else {
-                                 animationQueue.Add( cell->detonate() );
-                               }
-
-                              if( firstClicked != nullptr )  {
-                                 firstClicked->Restore();
-                                 firstClicked->getLeftCell()->Restore();
-                                 firstClicked->getRightCell()->Restore();
-                               }
-
-                              if( field->allCleared() )  {
-                                 Reset( ); //If game won
-                               }
-                            } 
-                         }
-                      }
-                  break;
-               }
-
-               case SDL_BUTTON_RIGHT:  {
-               x = ( event.button.x - origin_x ) / cellSize - borderCells; 
-               y = ( event.button.y - origin_y ) / cellSize - borderCells;
-
-               if( inTextureBounds( x, y ) ) {
-
-                  cell = field->getCellAt( x, y);
-                  if( !cell->Cleared() )  {
-                     if( firstClicked != nullptr )  {
-
-                        theme->pointerAnimation( ( event.button.x / cellSize ) * cellSize + cellSize / 2, ( event.button.y / cellSize ) * cellSize + cellSize / 2 );
-
-                        if( cell->Flagged() )  {
-                           field->Unflag();
-                         }
-                        else  {
-                           field->Flag();
-                         }
-
-                        int flag = cell->Flag();
-
-                        animationQueue.Add( Redraw( cell, flag ) );
-                        auto coords = cell->getCoords();
-                        theme->detonationAnimation( 
-                           ( coords.x + borderCells ) * cellSize + cellSize / 2 + origin_x, 
-                           ( coords.y + borderCells ) * cellSize + cellSize / 2 + origin_y, 
-                           canvas, flag == Cell::State::cell );
-
-                        animationQueue.Add( cell->hideErased() );
-                        animationQueue.Add( setFlagCount() );
-
-                        if( field->allCleared() )  {
-                           Reset( );
-                         }
-                      }
-                   }
-                }
-               break;
-               }
+     switch( event.type )  {
+        //On windows the renderer cannot be recovered so the textures have to be reloaded
+  #ifdef _WIN32
+        case SDL_WINDOWEVENT:  {
+           if( event.window.event == SDL_WINDOWEVENT_RESTORED )  {
+              loadTextures(); 
+              drawGameArea();
+              redrawScene();
             }
+           break;
+         }
+  #endif
+        case SDL_MOUSEMOTION:  {
+           if( inScreenBounds( event.motion.x, event.motion.y ) )  {
+              cursor_x = ( ( event.motion.x - origin_x ) / cellSize ) * cellSize;
+              cursor_y = ( ( event.motion.y - origin_y ) / cellSize ) * cellSize;
+            }
+           break;
+         }
+           
+        case SDL_MOUSEBUTTONUP:  {
+           SDL_PushEvent( &breakEvent );
+              switch( event.button.button )  {
+                 case SDL_BUTTON_LEFT :  {
+                    if( inScreenBounds( event.button.x, event.button.y ) )  {
+                       x = ( event.button.x - origin_x ) / cellSize - borderCells; 
+                       y = ( event.button.y - origin_y ) / cellSize - borderCells;
+
+                       if( inTextureBounds( x, y ) ) {
+                          if( newgame )  {
+                             field->Mine( mineCount, { x, y } );
+                             newgame = false;
+
+                             auto cell = field->getCellAt( x, y);
+                             firstClicked = cell;
+                             animationQueue.Add( cell->detonate() );
+                           }
+
+                          cell = field->getCellAt( x, y );
+                          if( !cell->Cleared() && !cell->Flagged() )  {
+                             if ( cell->getState() == Cell::State::mined )  { 
+                                cell->Clear();
+                                field->Flag();
+
+                                animationQueue.Add( setFlagCount() );
+
+                                animationQueue.Add( { cell->getCoords() } );
+
+                                if( secondChances > 0 && !field->allCleared() )  {
+                                   secondChances--;
+                                   break;
+                                 }
+
+                                else  {
+                                   secondChances--;
+                                   animationQueue.Add( cell->detonateAll() );
+                                   //Reset();
+                                 }
+                              }
+                             else {
+                                animationQueue.Add( cell->detonate() );
+                              }
+
+                             if( firstClicked != nullptr )  {
+                                firstClicked->Restore();
+                                firstClicked->getLeftCell()->Restore();
+                                firstClicked->getRightCell()->Restore();
+                              }
+
+                             if( field->allCleared() )  {
+                                Reset( ); //If game won
+                              }
+                           } 
+                        }
+                     }
+                 break;
+              }
+
+              case SDL_BUTTON_RIGHT:  {
+              x = ( event.button.x - origin_x ) / cellSize - borderCells; 
+              y = ( event.button.y - origin_y ) / cellSize - borderCells;
+
+              if( inTextureBounds( x, y ) ) {
+
+                 cell = field->getCellAt( x, y);
+                 if( !cell->Cleared() )  {
+                    if( firstClicked != nullptr )  {
+
+                       theme->pointerAnimation( ( event.button.x / cellSize ) * cellSize + cellSize / 2, ( event.button.y / cellSize ) * cellSize + cellSize / 2 );
+
+                       if( cell->Flagged() )  {
+                          field->Unflag();
+                        }
+                       else  {
+                          field->Flag();
+                        }
+
+                       int flag = cell->Flag();
+
+                       animationQueue.Add( Redraw( cell, flag ) );
+                       auto coords = cell->getCoords();
+                       theme->detonationAnimation( 
+                          ( coords.x + borderCells ) * cellSize + cellSize / 2 + origin_x, 
+                          ( coords.y + borderCells ) * cellSize + cellSize / 2 + origin_y, 
+                          canvas, flag == Cell::State::cell );
+
+                       animationQueue.Add( cell->hideErased() );
+                       animationQueue.Add( setFlagCount() );
+
+                       if( field->allCleared() )  {
+                          Reset( );
+                        }
+                     }
+                  }
+               }
+             break;
+             }
+           }
 
             redrawScene();
             break;
@@ -607,26 +588,26 @@ void Game::Run()  {
  }
 
 void Game::loadTheme( std::string themeName_ )  {
-    theme.reset();
-    theme = std::make_shared<Theme>( std::string( "resources/" ) + themeName_ + std::string( "/" ), canvas, cellSize );
+   theme.reset();
+   theme = std::make_shared<Theme>( std::string( "resources/" ) + themeName_ + std::string( "/" ), canvas, cellSize );
  }
 
 void Game::flipEnableCursor()  {
-    cursorEnabled ^= false;
+   cursorEnabled ^= false;
  }
 
 void Game::flipEnableHint()  {
-    hintEnabled ^= false;
+   hintEnabled ^= false;
  }
 
 void Game::loadTextures()  {
-    tileMap = std::make_shared<Texture>( theme->getSkin(), canvas.getRenderer() );
-    tileSize = tileMap->imageWidth();
-    gameArea = std::make_shared<Texture>( fieldLength * tileSize, fieldHeight * tileSize, canvas.getRenderer() );
+   tileMap = std::make_shared<Texture>( theme->getSkin(), canvas.getRenderer() );
+   tileSize = tileMap->imageWidth();
+   gameArea = std::make_shared<Texture>( fieldLength * tileSize, fieldHeight * tileSize, canvas.getRenderer() );
 
-    borderTiles = std::make_shared<Texture>( ( 2 * borderCells + fieldLength ) * tileSize, ( 2 * borderCells + fieldHeight ) * tileSize, canvas.getRenderer() );
-    borderTiles->setColor( 150, 150, 150 ); //gray
-    tileMap->setBlendMode( SDL_BLENDMODE_NONE ); 
+   borderTiles = std::make_shared<Texture>( ( 2 * borderCells + fieldLength ) * tileSize, ( 2 * borderCells + fieldHeight ) * tileSize, canvas.getRenderer() );
+   borderTiles->setColor( 150, 150, 150 ); //gray
+   tileMap->setBlendMode( SDL_BLENDMODE_NONE ); 
  }
 
 //----------Theme----------
@@ -689,37 +670,37 @@ void Theme::redrawAnimation( std::vector<Animation>& animations_, Animation& ani
  }
 
 void Theme::redrawBackground( SDL_Rect dest_, Canvas& canvas_ )  {
-   if( backgroundTexture != nullptr && blackTexture != nullptr )  {
-      canvas_.renderTargetSelf();
-      canvas_.Paint( *blackTexture );
-      canvas_.Paint( *backgroundTexture, dest_ );
-    }
+  if( backgroundTexture != nullptr && blackTexture != nullptr )  {
+     canvas_.renderTargetSelf();
+     canvas_.Paint( *blackTexture );
+     canvas_.Paint( *backgroundTexture, dest_ );
+   }
  }
 
 void Theme::detonationAnimation( int x_, int y_, Canvas& canvas_, bool reverse_ )  {
-    if( detonationTexture->getTexture() != nullptr )  {
-      if( reverse_ )  {
-         detonations.emplace_back( Animation( reverseDetonationTexture, canvas_.getRenderer(), cellSize, cellSize ) );
-       }
-
-      else  {
-         detonations.emplace_back( Animation( detonationTexture, canvas_.getRenderer(), cellSize, cellSize ) );
-       }
-      detonations.back().Activate( x_, y_ );
+  if( detonationTexture->getTexture() != nullptr )  {
+    if( reverse_ )  {
+       detonations.emplace_back( Animation( reverseDetonationTexture, canvas_.getRenderer(), cellSize, cellSize ) );
      }
+
+    else  {
+       detonations.emplace_back( Animation( detonationTexture, canvas_.getRenderer(), cellSize, cellSize ) );
+     }
+    detonations.back().Activate( x_, y_ );
+   }
  }
 
 void Theme::erasureAnimation( int x_, int y_, Canvas& canvas_, bool reverse_ )  {
-    if( erasureTexture->getTexture() != nullptr )  {
-      if( reverse_ )  {
-         erasures.emplace_back( Animation( reverseErasureTexture, canvas_.getRenderer(), cellSize, cellSize ) );
-       }
-
-      else  {
-         erasures.emplace_back( Animation( erasureTexture, canvas_.getRenderer(), cellSize, cellSize ) );
-       }
-      erasures.back().Activate( x_, y_ );
+  if( erasureTexture->getTexture() != nullptr )  {
+    if( reverse_ )  {
+       erasures.emplace_back( Animation( reverseErasureTexture, canvas_.getRenderer(), cellSize, cellSize ) );
      }
+
+    else  {
+       erasures.emplace_back( Animation( erasureTexture, canvas_.getRenderer(), cellSize, cellSize ) );
+     }
+    erasures.back().Activate( x_, y_ );
+   }
  }
 std::string Theme::getSkin()  {
     return location + std::string( "skin.png" );
