@@ -3,4 +3,6 @@
 *.o
 mines
 .DS_Store
+*.blend
 blends
+old mines
