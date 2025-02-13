@@ -79,7 +79,7 @@ void Game::Roll()  {
       gameHeight -= cellSize;;
     }
 
-   auto x = ( difficulty == 1 ? 6 : 6.2 ) * std::pow( 2, difficulty == 1 ? 0 : difficulty ); // adjust the 6 for /difficulty
+   auto x = 6 * std::pow( 2, difficulty == 1 ? 0 : difficulty ); // adjust the 6 for /difficulty
    mineCount = x * std::log( x );
 
    origin_y = ( canvas.getScreenSize().height - gameHeight ) / 2 + backgroundOffset * cellSize;
